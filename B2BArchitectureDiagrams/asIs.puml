@@ -5,9 +5,15 @@ rectangle public {
     rectangle "b2b-web" as b2bWeb
     rectangle "mercurio-client-api" as mercurioClientApi
     rectangle "mercurio-now" as mercurioNow
+    rectangle "mercurio-bff" as mercurioBff
+}
+
+rectangle privacy {
+    rectangle "b2b-api" as b2bApi
 }
 
 users -> b2bWeb
 users -> mercurioClientApi
 users -> mercurioNow
+b2bWeb -> mercurioBff
 @enduml
