@@ -12,6 +12,11 @@ rectangle privacy {
     rectangle "b2b-api" as b2bApi
 }
 
+skinparam b2bApi {
+    BackgroundColor Aqua
+}
+
+
 users -> b2bWeb
 users -> mercurioClientApi
 users -> mercurioNow
