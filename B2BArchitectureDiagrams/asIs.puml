@@ -1,6 +1,10 @@
 @startuml
 left to right direction
 actor users
+skinparam rectangle {
+    BackgroundColor<<Deprecated>> Red
+    FontColor<<Deprecated>> White
+}
 rectangle public {
     rectangle "b2b-web" as b2bWeb
     rectangle "mercurio-client-api" as mercurioClientApi
@@ -9,11 +13,7 @@ rectangle public {
 }
 
 rectangle privacy {
-    rectangle "b2b-api" as b2bApi
-}
-
-skinparam b2bApi {
-    BackgroundColor Aqua
+    rectangle "b2b-api" as b2bApi<<Deprecated>>
 }
 
 
