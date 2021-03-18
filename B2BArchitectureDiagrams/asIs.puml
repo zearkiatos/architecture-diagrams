@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+actor users
+rectangle public {
+    rectangle "b2b-web" as b2bWeb
+    rectangle "mercurio-client-api" as mercurioClientApi
+    rectangle "mercurio-now" as mercurioNow
+}
+
+users -> b2bWeb
+users -> mercurioClientApi
+users -> mercurioNow
+@enduml
