@@ -1,10 +1,8 @@
 @startuml
+!include <cloudinsight/mongodb>
+title B2B - Architecture AsIs
 left to right direction
 actor users
-skinparam rectangle {
-    BackgroundColor<<Deprecated>> Red
-    FontColor<<Deprecated>> White
-}
 rectangle public {
     rectangle "b2b-web" as b2bWeb
     rectangle "mercurio-client-api" as mercurioClientApi
@@ -13,12 +11,19 @@ rectangle public {
 }
 
 rectangle privacy {
-    rectangle "b2b-api" as b2bApi<<Deprecated>>
+    rectangle "b2b-Api" as b2bApi #red;line:white;line.bold;text:white
+    rectangle "mercurio-unleash" as mercurioUnleash
+    cloud gcp #red;line:white;line.bold;text:white
+    database "<$mongodb>" as mongodb #green;line:white;line.bold;text:white
+    
 }
 
 
-users -> b2bWeb
-users -> mercurioClientApi
-users -> mercurioNow
-b2bWeb -> mercurioBff
+users --> b2bWeb
+users --> mercurioClientApi
+users --> mercurioNow
+b2bWeb --> mercurioBff
+mercurioBff --> b2bApi
+b2bApi --> mercurioUnleash
+mercurioUnleash --> gcp: Unleash Authentication
 @enduml
