@@ -1,0 +1,15 @@
+@startuml
+title Redux Cycle
+left to right direction
+
+rectangle "Action Creator" as actionCreator
+rectangle "Action" as action
+rectangle "Dispatch" as dispatch
+rectangle "Reducers" as reducers
+rectangle "State" as state
+
+actionCreator --> action
+action --> dispatch
+dispatch --> reducers
+reducers --> state
+@enduml
