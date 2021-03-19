@@ -1,5 +1,6 @@
 @startuml
 !include <cloudinsight/mongodb>
+!include <cloudinsight/kafka>
 title B2B - Architecture AsIs
 left to right direction
 actor users
@@ -15,7 +16,9 @@ rectangle privacy {
     rectangle "mercurio-unleash" as mercurioUnleash
     cloud gcp #red;line:white;line.bold;text:white
     database "<$mongodb>" as mongodb #green;line:white;line.bold;text:white
-    
+    rectangle "mercurio-inventory-api" as mercurioInventoryApi
+    queue "<$kafka>" as kafka #black;line:white;line.bold;text:white
+    rectangle "mercurio-orders-api" as mercurioOrdersApi
 }
 
 
@@ -26,4 +29,11 @@ b2bWeb --> mercurioBff
 mercurioBff --> b2bApi
 b2bApi --> mercurioUnleash
 mercurioUnleash --> gcp: Unleash Authentication
+mercurioUnleash --> mongodb: unleash
+mercurioBff --> mercurioInventoryApi
+mercurioBff --> mercurioOrdersApi
+mercurioInventoryApi --> mongodb: inventory
+mercurioInventoryApi --> kafka
+' mercurioClientApi --> mercurioInventoryApi
+' mercurioClientApi --> mercurioOrdersApi
 @enduml
