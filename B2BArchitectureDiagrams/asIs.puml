@@ -1,0 +1,85 @@
+@startuml
+!include <cloudinsight/mongodb>
+!include <cloudinsight/kafka>
+!include <cloudinsight/redis>
+!include <cloudinsight/haproxy>
+!include <cloudinsight/sqlserver>
+title B2B - Architecture AsIs
+left to right direction
+actor users
+rectangle public {
+    rectangle "b2b-web" as b2bWeb
+    rectangle "mercurio-client-api" as mercurioClientApi
+    rectangle "mercurio-now" as mercurioNow
+    rectangle "mercurio-bff" as mercurioBff
+}
+
+rectangle privacy {
+    rectangle "b2b-Api" as b2bApi #red;line:white;line.bold;text:white
+    rectangle "mercurio-unleash" as mercurioUnleash
+    cloud gcp #red;line:white;line.bold;text:white
+    database "<$mongodb>" as mongodb #green;line:white;line.bold;text:white
+    rectangle "mercurio-inventory-api" as mercurioInventoryApi
+    queue "<$kafka>" as kafka #black;line:white;line.bold;text:white
+    rectangle "mercurio-orders-api" as mercurioOrdersApi
+    rectangle "mercurio-auth" as mercurioAuth
+    rectangle "mercurio-jobs" as mercurioJobs
+}
+
+rectangle Legacy {
+    rectangle "mercurio-inventory-base" as mercurioInventoryBase
+    cloud Azure#blue;line:white;line.bold;text:white {
+        rectangle "<$redis>" as redis #white;line:red;line.bold;text:red
+    }
+    folder FTP#red;line:white;line.bold;text:white
+    rectangle "<$haproxy>ETL" as ETL #red;line:white;line.bold;text:white
+    rectangle "mercurio-inventory-legacy" as mercurioInventoryLegacy #red;line:white;line.bold;text:white
+    queue NATS #red;line:white;line.bold;text:white
+    rectangle "mercurio-orders-base" as mercurioOrdersBase
+    rectangle "b2b-service" as b2bService #red;line:white;line.bold;text:white
+    rectangle OnPremise {
+        database Oracle as oracle #red;line:white;line.bold;text:white
+        database "<$sqlserver>" as sqlServer #red;line:white;line.bold;text:white
+    }
+}
+
+
+users --> b2bWeb
+users --> mercurioClientApi
+users --> mercurioNow
+b2bWeb --> mercurioBff
+mercurioBff --> b2bApi
+b2bApi --> mercurioUnleash
+mercurioUnleash --> gcp#blue: Unleash Authentication
+mercurioUnleash --> mongodb#green: unleash
+mercurioBff --> mercurioInventoryApi
+mercurioInventoryApi --> mongodb#green: inventory
+mercurioInventoryApi --> kafka#black
+mercurioBff --> mercurioOrdersApi
+mercurioOrdersApi --> kafka#black
+mercurioOrdersApi --> mongodb#green: orders
+mercurioBff --> mercurioAuth
+mercurioAuth --> mongodb#green: auth
+mercurioClientApi --> mercurioInventoryApi
+mercurioClientApi --> mercurioOrdersApi
+mercurioClientApi --> mercurioAuth
+mercurioInventoryBase --> kafka#black
+mercurioInventoryBase --> redis#red
+mercurioInventoryBase --> FTP#gold
+ETL --> FTP#gray
+mercurioJobs --> mercurioInventoryBase#orange
+mercurioJobs --> mercurioAuth#orange
+mercurioJobs --> mercurioOrdersApi#orange
+mercurioInventoryLegacy --> mongodb#green
+mercurioInventoryLegacy --> redis#red
+mercurioInventoryLegacy --> NATS#purple
+mercurioOrdersApi --> NATS#purple
+mercurioBff --> mercurioOrdersBase
+mercurioOrdersBase --> mercurioOrdersApi
+b2bService --> mercurioOrdersBase
+b2bService --> FTP#gold
+b2bService --> NATS#purple
+b2bService --> redis#red
+b2bService --> oracle#Magenta
+b2bService --> sqlServer#cyan
+@enduml
