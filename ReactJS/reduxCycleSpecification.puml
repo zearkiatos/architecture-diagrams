@@ -1,0 +1,17 @@
+@startuml
+title Redux Cycle Specification
+left to right direction
+
+rectangle "Action Creator" as actionCreator
+note left: To change state of our app, we call an...
+rectangle "Action" as action
+rectangle "Dispatch" as dispatch
+rectangle "Reducers" as reducers
+rectangle "State" as state
+
+actionCreator --> action: Produces an...
+action --> dispatch: Gets fed to...
+dispatch --> reducers: forwards the action to...
+reducers --> state: Creates new...
+note right :Wait until we need to update state again
+@enduml
