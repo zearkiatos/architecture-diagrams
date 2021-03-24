@@ -1,0 +1,30 @@
+@startuml
+    !include <cloudinsight/mongodb>
+    !include <cloudinsight/kafka>
+    title Sync Stock with IMS Broker - Pre-Strati - (ETLLess)
+
+    rectangle Chile {
+        rectangle mercurio {
+            rectangle "mercurio-jobs" as mercurioJobs
+            queue "<$kafka> _mercurio-stock-sync-cl-east" as mercurioStockSync #black;line:white;line.bold;text:white
+            rectangle "mercurio-inventory-base" as mercurioInventoryBase
+            database "<$mongodb>" as inventoryDb #green;line:white;line.bold;text:white
+            queue "<$kafka> _mercurio-item-stock-updated-cl-[east|west]" as mercurioItemStock #black;line:white;line.bold;text:white
+            rectangle "mercurio-inventory-api" as mercurioInventoryApi
+
+        }
+        rectangle ims {
+            rectangle broker
+        }
+    }
+
+
+    mercurioJobs -[#black]-> mercurioStockSync
+    mercurioStockSync -[#black]-> mercurioInventoryBase: (1) Trigger Syncronization
+    mercurioInventoryBase -[#green]-> inventoryDb: (2) Get last sync date
+    mercurioInventoryBase --> broker : (3) Get Updated Stock
+    mercurioInventoryBase -[#black]-> mercurioItemStock
+    mercurioItemStock -[#black]-> mercurioInventoryApi : (4) Stock Updated
+    mercurioInventoryApi -[#green]-> inventoryDb
+
+@enduml
