@@ -1,4 +1,5 @@
 @startuml
+    left to right direction
     !include <cloudinsight/mongodb>
     !include <cloudinsight/kafka>
     title Sync Stock with IMS Broker - Pre-Strati - (ETLLess)
@@ -10,23 +11,36 @@
             rectangle "mercurio-inventory-base" as mercurioInventoryBase
             database "<$mongodb>" as inventoryDb #green;line:white;line.bold;text:white
             queue "<$kafka> _mercurio-item-stock-updated-cl-[east|west]" as mercurioItemStock #black;line:white;line.bold;text:white
-            rectangle "mercurio-inventory-api" as mercurioInventoryApi
 
         }
+
         rectangle ims {
             rectangle broker
         }
     }
 
+    queue "<$kafka> replicator" as replicator #black;line:white;line.bold;text:white
 
-    mercurioJobs -[#black]-> mercurioStockSync
-    mercurioStockSync -[#black]-> mercurioInventoryBase: (1) Trigger Syncronization
-    mercurioInventoryBase -[#green]-> inventoryDb: (2) Get last sync date
-    inventoryDb --> mercurioInventoryBase
-    mercurioInventoryBase --> broker : (3) Get Updated Stock
+    rectangle Strati {
+        rectangle mercurio as mercurioStrati {
+            rectangle "mercurio-inventory-api" as mercurioInventoryApi
+                    database "<$mongodb>" as inventoryDbStrati #green;line:white;line.bold;text:white
+        }
+    }
+
+
+    mercurioJobs -[#black]> mercurioStockSync
+    mercurioStockSync -[#black]> mercurioInventoryBase: (1) Trigger Syncronization
+    mercurioInventoryBase -[#green]> inventoryDb: (2) Get last sync date
+    inventoryDb -> mercurioInventoryBase #green
+    mercurioInventoryBase -> inventoryDb #green
+    mercurioInventoryBase -> broker : (3) Get Updated Stock
     broker --> mercurioInventoryBase 
-    mercurioInventoryBase -[#black]-> mercurioItemStock
-    mercurioItemStock -[#black]-> mercurioInventoryApi : (4) Stock Updated
-    mercurioInventoryApi -[#green]-> inventoryDb
+    mercurioInventoryBase -> mercurioItemStock #black
+    mercurioItemStock --> replicator #black
+    replicator --> mercurioItemStock #black
+    replicator --> mercurioInventoryApi #black : (4) Stock Updated
+    mercurioInventoryApi -> inventoryDbStrati #green
+    inventoryDbStrati -> mercurioInventoryApi #green
 
 @enduml
