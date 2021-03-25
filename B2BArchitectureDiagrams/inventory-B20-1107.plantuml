@@ -22,7 +22,9 @@
     mercurioJobs -[#black]-> mercurioStockSync
     mercurioStockSync -[#black]-> mercurioInventoryBase: (1) Trigger Syncronization
     mercurioInventoryBase -[#green]-> inventoryDb: (2) Get last sync date
+    inventoryDb --> mercurioInventoryBase
     mercurioInventoryBase --> broker : (3) Get Updated Stock
+    broker --> mercurioInventoryBase 
     mercurioInventoryBase -[#black]-> mercurioItemStock
     mercurioItemStock -[#black]-> mercurioInventoryApi : (4) Stock Updated
     mercurioInventoryApi -[#green]-> inventoryDb
