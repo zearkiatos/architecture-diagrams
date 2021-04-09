@@ -1,0 +1,37 @@
+@startuml
+
+rectangle "Action Creator" as actionCreator #white
+rectangle "'Action' either an object or function" as actionEither #white
+rectangle dispatch #white
+rectangle "New Action!" as newAction #white
+
+rectangle "Redux Thunk" as reduxThunk #SkyBlue;line:Blue;line.bold;text:white{
+    rectangle "'Action'" as action #white
+    rectangle "No" as no #Pink;line:red
+    rectangle "Yes!" as yes #LightGreen;line:green
+    rectangle "Hi Action! Are you a function?" as hiAction #SkyBlue;line:SkyBlue
+    rectangle "Great! I'm going to call you \n with the 'dispatch' and \n 'getState' functions. Go ahead \n and 'dispatch' actions at your \n leisure" as great #SkyBlue;line:SkyBlue
+    rectangle "Function invoked with 'dispatch'" as function #white
+    rectangle "We wait for our request to finish" as weWait #white
+        rectangle "Request complete, dispatch action manually" as request #white
+}
+
+rectangle "Reducers" as reducers #white
+
+newAction -[#black]-> dispatch
+actionCreator -[#black]-> actionEither
+actionEither -[#black]-> dispatch
+dispatch  -[#black]-> action
+action -[#black]-> hiAction
+hiAction -[#black]-> no
+hiAction -[#black]-> yes
+no -[#black]-> reducers
+yes -[#black]> great
+great -[#black]> function
+function -[#black]-> weWait
+weWait -[#black]-> request
+request -[#black]-> newAction
+
+
+
+@enduml
