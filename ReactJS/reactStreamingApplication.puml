@@ -1,0 +1,5 @@
+@startuml
+    rectangle "Streamer's Computer" #SkyBlue;line:Blue {
+        rectangle "Open Broadcaster Software (OBS)" as obs #White
+    }
+@enduml
