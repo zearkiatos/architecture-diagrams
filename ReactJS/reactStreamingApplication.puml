@@ -1,5 +1,19 @@
 @startuml
+    left to right direction
     rectangle "Streamer's Computer" #SkyBlue;line:Blue {
         rectangle "Open Broadcaster Software (OBS)" as obs #White
     }
+
+    rectangle "Real Time Messaging Protocol (RTMP) Server" as rtmp #PaleGreen;line:Green
+    
+    rectangle "Viewer's Browser" as view1 #LightYellow;line:Gold
+    rectangle "Viewer's Browser" as view2 #LightYellow;line:Gold
+    rectangle "Viewer's Browser" as view3 #LightYellow;line:Gold
+    rectangle "Viewer's Browser" as view4 #LightYellow;line:Gold
+
+    obs -[#Black;bold]-> rtmp: "Video Stream + Stream Key"
+    rtmp -[#Black;bold]-> view1 : "Video feed"
+    rtmp -[#Black;bold]-> view2
+    rtmp -[#Black;bold]-> view3
+    rtmp -[#Black;bold]-> view4
 @enduml
