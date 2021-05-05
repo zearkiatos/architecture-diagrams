@@ -1,0 +1,11 @@
+@startuml
+actor fixer
+"mercurio-bff" -> "mercurio-orders-api" : 1.1 GET: /v2/orders
+"mercurio-orders-api" -> "mercurio-orders-base" : 1.2 GET: /v1/orders for data grid result + mongoDB
+"mercurio-bff" -> "mercurio-orders-api" : 2.1 GET: /v2/orders/host
+"mercurio-orders-api" -> "mercurio-orders-base": 2.2 GET: /v1/orders for generate host file + mongoDB
+fixer -> "mercurio-bff" : 3.1 Execute manual order fix
+"mercurio-bff" -> "mercurio-orders-base" : 3.2 GET: /v1/orders/shipping-groups/${shippingGroupId}/fix
+"mercurio-orders-base" -> "mercurio-orders-api" : 3.3: POST: /v2/orders/upsert-many-from-oms
+oms <- "mercurio-orders-base" : Get orders from OMS DataBase
+@enduml
