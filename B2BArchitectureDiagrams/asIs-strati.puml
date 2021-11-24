@@ -24,10 +24,10 @@ rectangle walmartChile as "Walmart Chile" {
     rectangle OMS #DarkGrey;line:white;line.bold;text:white
     rectangle IMS #DarkGrey;line:white;line.bold;text:white
     rectangle promiseEngine as "Promise Engine" #DarkGrey;line:white;line.bold;text:white
-    queue checkoutOrderPaid as "<$kafka{scale=.5}> checkout-order-paid-*" #black;line:white;line.bold;text:white
+    ' queue checkoutOrderPaid as "<$kafka{scale=.5}> checkout-order-paid-*" #black;line:white;line.bold;text:white
     rectangle OMS #DarkGrey;line:white;line.bold;text:white
-    queue checkoutOrderReinjected as "<$kafka{scale=.5}> checkout-order-paid-reinjected-us-scus" #black;line:white;line.bold;text:white
-    queue checkoutOrderRescheduledPublished as "<$kafka{scale=.5}> checkout_order_rescheduled-*" #black;line:white;line.bold;text:white
+    ' queue checkoutOrderReinjected as "<$kafka{scale=.5}> checkout-order-paid-reinjected-us-scus" #black;line:white;line.bold;text:white
+    ' queue checkoutOrderRescheduledPublished as "<$kafka{scale=.5}> checkout_order_rescheduled-*" #black;line:white;line.bold;text:white
     rectangle mercurioChile as "Mercurio - B2B" {
         rectangle b2bService as "<$nodejs{scale=.5}> b2b-service" #RoyalBlue;line:white;line.bold;text:white
         rectangle mercurioOrdersBase as "<$nodejs{scale=.5}> mercurio-orders-base" #RoyalBlue;line:white;line.bold;text:white
@@ -37,18 +37,19 @@ rectangle walmartChile as "Walmart Chile" {
         database redisCache as "\n<$redis{scale=.5}> Redis\n" #RoyalBlue;line:white;line.bold;text:white
         folder ftp #RoyalBlue;line:white;line.bold;text:white
 
-        queue _mercurioUpdatePurchaseOrder as "<$kafka{scale=.5}> _mercurio-update-purchase-order-*" #black;line:white;line.bold;text:white
-        queue _mercurioHatChanged as "<$kafka{scale=.5}> _mercurio-hat-changed-*" #black;line:white;line.bold;text:white
-        queue _mercurioBrandChanged as "<$kafka{scale=.5}> _mercurio-brand-changed-*" #black;line:white;line.bold;text:white
-        queue _mercurioVendorChanged as "<$kafka{scale=.5}> _mercurio-vendor-changed-*" #black;line:white;line.bold;text:white
-        queue _mercurioSkuChanged as "<$kafka{scale=.5}> _mercurio-item-sku-changed-*" #black;line:white;line.bold;text:white
-        queue _mercurioSkuRemoved as "<$kafka{scale=.5}> _mercurio-item-sku-removed-*" #black;line:white;line.bold;text:white
-        queue _mercurioCeOrderPaid as "<$kafka{scale=.5}> _mercurio-ce-order-paid-*" #black;line:white;line.bold;text:white
-        queue _mercurioUpdateOrdersOms as "<$kafka{scale=.5}> _mercurio-update-orders-oms-*" #black;line:white;line.bold;text:white
-        queue _mercurioItemPublished as "<$kafka{scale=.5}> _mercurio-item-published-*" #black;line:white;line.bold;text:white
-        queue _mercurioItemStockUpdated as "<$kafka{scale=.5}> _mercurio-item-stock-updated-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioUpdatePurchaseOrder as "<$kafka{scale=.5}> _mercurio-update-purchase-order-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioHatChanged as "<$kafka{scale=.5}> _mercurio-hat-changed-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioBrandChanged as "<$kafka{scale=.5}> _mercurio-brand-changed-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioVendorChanged as "<$kafka{scale=.5}> _mercurio-vendor-changed-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioSkuChanged as "<$kafka{scale=.5}> _mercurio-item-sku-changed-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioSkuRemoved as "<$kafka{scale=.5}> _mercurio-item-sku-removed-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioCeOrderPaid as "<$kafka{scale=.5}> _mercurio-ce-order-paid-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioUpdateOrdersOms as "<$kafka{scale=.5}> _mercurio-update-orders-oms-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioItemPublished as "<$kafka{scale=.5}> _mercurio-item-published-*" #black;line:white;line.bold;text:white
+        ' queue _mercurioItemStockUpdated as "<$kafka{scale=.5}> _mercurio-item-stock-updated-*" #black;line:white;line.bold;text:white
         
     }
+    queue eventChile as "<$kafka{scale=.5}> events" #black;line:white;line.bold;text:white
 }
 
 rectangle walmartGlobal as "Walmart Global" {
@@ -64,15 +65,16 @@ rectangle walmartGlobal as "Walmart Global" {
         }
 
         rectangle publicProxy as "Public by ApiProxy" {
-            rectangle mercurioBff as "<$nodejs{scale=.5}> mercurio-bff" #RoyalBlue;line:white;line.bold;text:white
             rectangle mercurioClientApi as "<$nodejs{scale=.5}> mercurio-client-api" #RoyalBlue;line:white;line.bold;text:white
         }
-        queue _mercurioStockSync as "<$kafka{scale=.5}> _mercurio-stock-sync-*" #black;line:white;line.bold;text:white
+        rectangle mercurioBff as "<$nodejs{scale=.5}> mercurio-bff" #RoyalBlue;line:white;line.bold;text:white
+        ' queue _mercurioStockSync as "<$kafka{scale=.5}> _mercurio-stock-sync-*" #black;line:white;line.bold;text:white
     }
     rectangle retailLinkFalcon as "Falcon Retail Link 🔐" #DarkGrey;line:white;line.bold;text:white
     rectangle pingFed as "PingFed 🔐" #DarkGrey;line:white;line.bold;text:white
-    queue mercurioVendorLogisticUpdate as "<$kafka{scale=.5}> mercurio-vendor-logistic-update-*" #black;line:white;line.bold;text:white
-    queue mercurioItemLeadtimeUpdated as "<$kafka{scale=.5}> mercurio-item-leadtime-updated-*" #black;line:white;line.bold;text:white
+    queue eventStrati as "<$kafka{scale=.5}> events" #black;line:white;line.bold;text:white
+    ' queue mercurioVendorLogisticUpdate as "<$kafka{scale=.5}> mercurio-vendor-logistic-update-*" #black;line:white;line.bold;text:white
+    ' queue mercurioItemLeadtimeUpdated as "<$kafka{scale=.5}> mercurio-item-leadtime-updated-*" #black;line:white;line.bold;text:white
 
 }
 
@@ -91,47 +93,56 @@ modelMaster -[#DarkGrey]-> ftp
 b2bService -[#RoyalBlue]-> ftp
 b2bService -[#RoyalBlue]-> omsDatabase 
 
-b2bService -[#RoyalBlue]--> _mercurioHatChanged
-b2bService -[#RoyalBlue]--> _mercurioBrandChanged
-b2bService -[#RoyalBlue]--> _mercurioVendorChanged
-b2bService -[#RoyalBlue]--> _mercurioSkuChanged
-b2bService -[#RoyalBlue]--> _mercurioSkuRemoved
-b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
-b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
-b2bService -[#RoyalBlue]--> _mercurioUpdateOrdersOms
-b2bService -[#RoyalBlue]--> _mercurioItemPublished
-b2bService -[#RoyalBlue]--> _mercurioUpdatePurchaseOrder
+' b2bService -[#RoyalBlue]--> _mercurioHatChanged
+' b2bService -[#RoyalBlue]--> _mercurioBrandChanged
+' b2bService -[#RoyalBlue]--> _mercurioVendorChanged
+' b2bService -[#RoyalBlue]--> _mercurioSkuChanged
+' b2bService -[#RoyalBlue]--> _mercurioSkuRemoved
+' b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
+' b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
+' b2bService -[#RoyalBlue]--> _mercurioUpdateOrdersOms
+' b2bService -[#RoyalBlue]--> _mercurioItemPublished
+' b2bService -[#RoyalBlue]--> _mercurioUpdatePurchaseOrder
+
+b2bService -[#RoyalBlue]--> eventChile
 
 mercurioOrdersBase -[#RoyalBlue]--> omsDatabase
-mercurioOrdersBase -[#Black]--> _mercurioUpdateOrdersOms
+' mercurioOrdersBase -[#Black]--> _mercurioUpdateOrdersOms
+mercurioOrdersBase -[#Black]--> eventChile
 mercurioBffChile -[#RoyalBlue]-> mercurioOrdersBase
 
-_mercurioHatChanged -[#Black]-> replicator
-_mercurioBrandChanged -[#Black]-> replicator
-_mercurioVendorChanged -[#Black]-> replicator
-_mercurioSkuChanged -[#Black]-> replicator
-_mercurioSkuRemoved -[#Black]-> replicator
-_mercurioCeOrderPaid -[#Black]-> replicator
-_mercurioCeOrderPaid -[#Black]-> replicator
-_mercurioUpdateOrdersOms -[#Black]-> replicator
-_mercurioItemPublished -[#Black]-> replicator
-_mercurioUpdatePurchaseOrder -[#Black]-> replicator
-_mercurioItemStockUpdated -[#Black]-> replicator
+eventChile -[#Black]> replicator
+eventStrati -[#Black]> replicator
+
+' _mercurioHatChanged -[#Black]-> replicator
+' _mercurioBrandChanged -[#Black]-> replicator
+' _mercurioVendorChanged -[#Black]-> replicator
+' _mercurioSkuChanged -[#Black]-> replicator
+' _mercurioSkuRemoved -[#Black]-> replicator
+' _mercurioCeOrderPaid -[#Black]-> replicator
+' _mercurioCeOrderPaid -[#Black]-> replicator
+' _mercurioUpdateOrdersOms -[#Black]-> replicator
+' _mercurioItemPublished -[#Black]-> replicator
+' _mercurioUpdatePurchaseOrder -[#Black]-> replicator
+' _mercurioItemStockUpdated -[#Black]-> replicator
 
 replicator -[#Black]---> mercurioOrdersApi
 mercurioOrdersApi -[#RoyalBlue]-> mercurioDataBase
 
-checkout -[#DarkGrey]--> checkoutOrderPaid
-checkout -[#DarkGrey]--> checkoutOrderReinjected
+' checkout -[#DarkGrey]--> checkoutOrderPaid
+' checkout -[#DarkGrey]--> checkoutOrderReinjected
 
-checkoutOrderPaid -[#Black]-> replicator
-checkoutOrderReinjected -[#Black]-> replicator
+checkout -[#DarkGrey]--> eventChile
 
-OMS -[#DarkGrey]--> checkoutOrderRescheduledPublished
+' checkoutOrderPaid -[#Black]-> replicator
+' checkoutOrderReinjected -[#Black]-> replicator
 
-checkoutOrderRescheduledPublished -[#Black]-> replicator
+' OMS -[#DarkGrey]--> checkoutOrderRescheduledPublished
+ OMS -[#DarkGrey]--> eventChile
+' checkoutOrderRescheduledPublished -[#Black]-> replicator
 
-mercurioVendorLogisticUpdate -[#Black]> replicator
+' mercurioVendorLogisticUpdate -[#Black]> replicator
+eventStrati -[#Black]> replicator
 mercurioOrdersApi -[#RoyalBlue]> mercurioVendorLogisticUpdate
 
 colaborator -[#Red]-> b2bWeb 
@@ -150,17 +161,17 @@ mercurioClientApi -[#RoyalBlue]> mercurioOrdersApi
 replicator -[#Black]> promiseEngine
 
 mercurioJobsChile -[#RoyalBlue]> mercurioInventoryBase
-mercurioInventoryBase -[#RoyalBlue]> ftp
 mercurioJobsStrati  -[#RoyalBlue]-> _mercurioStockSync
-mercurioJobsStrati -[#RoyalBlue]-> mercurioOrdersApi: "Execute notification associated to the orders, vendors configuration"
-mercurioJobsStrati -[#RoyalBlue]-> mercurioAuthApi: "Execute notification to the users"
+mercurioJobsStrati -[#RoyalBlue]-> mercurioOrdersApi
+mercurioJobsStrati -[#RoyalBlue]-> mercurioAuthApi
 
 _mercurioStockSync -[#Black]> replicator
 
 
 replicator -[#Black]-> mercurioInventoryBase
 mercurioInventoryBase  -[#RoyalBlue]-> IMS
-mercurioInventoryBase -[#RoyalBlue]-> _mercurioItemStockUpdated
+' mercurioInventoryBase -[#RoyalBlue]-> _mercurioItemStockUpdated
+mercurioInventoryBase -[#RoyalBlue]-> eventChile
 
 mercurioInventoryApi -[#RoyalBlue]-> replicator
 mercurioInventoryApi -[#RoyalBlue]-> mercurioDataBase
