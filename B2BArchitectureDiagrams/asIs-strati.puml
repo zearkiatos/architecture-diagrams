@@ -36,6 +36,10 @@ rectangle kafkaQueue as "<$kafka> Kafka Queues" {
     queue checkoutOrderPaid as "<$kafka{scale=.5}> checkout-order-paid-*" #DarkGrey;line:white;line.bold;text:white
     queue checkoutOrderReinjected as "<$kafka{scale=.5}> checkout-order-paid-reinjected-us-scus" #DarkGrey;line:white;line.bold;text:white
     queue checkoutOrderRescheduledPublished as "<$kafka{scale=.5}> checkout_order_rescheduled-*" #DarkGrey;line:white;line.bold;text:white
+    queue _mercurioHatChanged as "<$kafka{scale=.5}> _mercurio-hat-changed-*" #black;line:white;line.bold;text:white
+    queue _mercurioBrandChanged as "<$kafka{scale=.5}> _mercurio-brand-changed-*" #black;line:white;line.bold;text:white
+    queue _mercurioVendorChanged as "<$kafka{scale=.5}> _mercurio-vendor-changed-*" #black;line:white;line.bold;text:white
+    queue _mercurioSkuChanged as "<$kafka{scale=.5}> _mercurio-item-sku-changed-*" #black;line:white;line.bold;text:white
     
 }
 
@@ -52,6 +56,10 @@ checkout -[Hidden]d-> OMS
 omsDatabase -[Hidden]d-> modelMaster
 modelMaster -[Hidden]d-> IMS
 OMS -[Hidden]d-> promiseEngine
+_mercurioHatChanged -[Hidden]d-> _mercurioBrandChanged
+_mercurioBrandChanged -[Hidden]d-> _mercurioVendorChanged
+_mercurioVendorChanged -[Hidden]d-> _mercurioSkuChanged
+_mercurioSkuChanged -[Hidden]d-> checkoutOrderPaid
 checkoutOrderPaid -[Hidden]d-> checkoutOrderReinjected
 checkoutOrderReinjected -[Hidden]d-> checkoutOrderRescheduledPublished
 mercurioChile -[Hidden]d-> checkout
@@ -68,6 +76,11 @@ modelMaster -[#DarkGrey]u-> ftp
 b2bService -[#RoyalBlue]l-> atgDatabase: "Get Sku, brand, vendor and rut"
 b2bService <-[#RoyalBlue]l-> redisCache: "Cache items information"
 b2bService -[#RoyalBlue]d-> ftp
+b2bService -[#RoyalBlue]-> omsDatabase
+b2bService -[#RoyalBlue]r-> _mercurioHatChanged
+b2bService -[#RoyalBlue]r-> _mercurioBrandChanged
+b2bService -[#RoyalBlue]r-> _mercurioVendorChanged
+b2bService -[#RoyalBlue]r-> _mercurioSkuChanged
  
 ' rectangle walmartChile as "Walmart Chile"
 
@@ -79,10 +92,6 @@ b2bService -[#RoyalBlue]d-> ftp
 '         database redisCache as "\n<$redis{scale=.5}> Redis\n" #RoyalBlue;line:white;line.bold;text:white
 
 '         queue _mercurioUpdatePurchaseOrder as "<$kafka{scale=.5}> _mercurio-update-purchase-order-*" #black;line:white;line.bold;text:white
-'         queue _mercurioHatChanged as "<$kafka{scale=.5}> _mercurio-hat-changed-*" #black;line:white;line.bold;text:white
-'         queue _mercurioBrandChanged as "<$kafka{scale=.5}> _mercurio-brand-changed-*" #black;line:white;line.bold;text:white
-'         queue _mercurioVendorChanged as "<$kafka{scale=.5}> _mercurio-vendor-changed-*" #black;line:white;line.bold;text:white
-'         queue _mercurioSkuChanged as "<$kafka{scale=.5}> _mercurio-item-sku-changed-*" #black;line:white;line.bold;text:white
 '         queue _mercurioSkuRemoved as "<$kafka{scale=.5}> _mercurio-item-sku-removed-*" #black;line:white;line.bold;text:white
 '         queue _mercurioCeOrderPaid as "<$kafka{scale=.5}> _mercurio-ce-order-paid-*" #black;line:white;line.bold;text:white
 '         queue _mercurioUpdateOrdersOms as "<$kafka{scale=.5}> _mercurio-update-orders-oms-*" #black;line:white;line.bold;text:white
@@ -128,12 +137,6 @@ b2bService -[#RoyalBlue]d-> ftp
 ' queue replicator as "<$kafka{scale=.5}> Replicator" #black;line:white;line.bold;text:white {
 ' }
 
-' b2bService -[#RoyalBlue]-> omsDatabase 
-
-' b2bService -[#RoyalBlue]--> _mercurioHatChanged
-' b2bService -[#RoyalBlue]--> _mercurioBrandChanged
-' b2bService -[#RoyalBlue]--> _mercurioVendorChanged
-' b2bService -[#RoyalBlue]--> _mercurioSkuChanged
 ' b2bService -[#RoyalBlue]--> _mercurioSkuRemoved
 ' b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
 ' b2bService -[#RoyalBlue]--> _mercurioCeOrderPaid
